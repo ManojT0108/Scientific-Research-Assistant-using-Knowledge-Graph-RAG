@@ -2,43 +2,20 @@
 
 A research assistant pipeline that collects papers, builds semantic search + knowledge graph context, and answers researcher-style questions using retrieval augmented generation (RAG).
 
-## Current Readiness Check
+## What This Project Does
 
-I validated this repository for clone/run readiness by:
+The system follows this workflow:
 
-- confirming tracked files are code-only (no generated artifacts or local virtualenv)
-- checking script syntax (`python -m py_compile ...`)
-- aligning pipeline file compatibility (`chunks_full.jsonl` and `chunks.jsonl` fallback)
-- fixing Redis index mismatch (`arxiv_chunks_idx`)
-- switching Redis host/port to env-driven defaults for container use
-- removing hardcoded API keys and using `ANTHROPIC_API_KEY`
+1. Fetch CS paper metadata from ArXiv
+2. Download full PDFs and parse section-aware text
+3. Chunk and embed papers for semantic retrieval
+4. Build a knowledge graph from extracted entities
+5. Compare semantic-only retrieval vs hybrid (semantic + graph) retrieval
+6. Generate natural-language answers using retrieved evidence and an LLM
 
 ## Architecture
 
 ![Knowledge Graph Structure](docs/architecture.png)
-
-```mermaid
-flowchart LR
-    A["fetch_papers_metadata.py"] --> B["download_pdfs.py"]
-    B --> C["parse_full_pdfs.py"]
-    C --> D["chunk_full_papers.py"]
-    D --> E["embed_chunks.py"]
-    D --> F["extract_entities.py"]
-    F --> G["build_kg_improved.py"]
-    E --> H["redis_setup.py"]
-    D --> H
-    G --> I["hybrid_search.py / search_with_kg.py"]
-    H --> I
-    I --> J["enhanced_rag.py"]
-```
-
-### Custom Architecture Image
-
-When you share your architecture image, place it at `docs/architecture.png` (or any path you prefer) and add it like this:
-
-```md
-![Architecture](docs/architecture.png)
-```
 
 ## Repository Layout
 
