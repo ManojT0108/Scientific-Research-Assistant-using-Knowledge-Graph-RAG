@@ -1,12 +1,22 @@
 .git
-.gitignore
 **/.DS_Store
 **/.venv
 **/__pycache__
 **/*.pyc
+**/.pytest_cache
+**/.mypy_cache
+**/.ruff_cache
+
+# Local-only / non-runtime assets
+docs
+ScientificResearchAssistant/local_reference_pre_cleanup
+
+# Exclude non-project folders in repository root
 Paper Review
 Poster
 Presentations
 Report
 Reports
+
+# Generated artifacts
 ScientificResearchAssistant/data

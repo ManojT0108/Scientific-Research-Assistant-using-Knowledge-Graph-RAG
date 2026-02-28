@@ -1,8 +1,11 @@
-# macOS
+# OS / editor
 .DS_Store
 **/.DS_Store
+.vscode/
+.idea/
+*.swp
 
-# Python
+# Python cache / virtualenv
 **/__pycache__/
 **/*.py[cod]
 **/.pytest_cache/
@@ -11,31 +14,23 @@
 **/.venv/
 **/venv/
 
-# Editor/OS
-.vscode/
-.idea/
-*.swp
-
-# Environment files
+# Secrets / env files
 **/.env
 **/.env.*
 
-# Large/generated project artifacts
+# Generated artifacts
 ScientificResearchAssistant/data/
 
-# Exclude non-code project docs at repository root
+# Keep local-only references out of Git
+ScientificResearchAssistant/local_reference_pre_cleanup/
+
+# Ignore non-project folders in repository root
 Paper Review/
 Poster/
 Presentations/
 Report/
 Reports/
 
-# Exclude non-essential experiment/debug scripts
-ScientificResearchAssistant/debug*.py
-ScientificResearchAssistant/diagnose*.py
-ScientificResearchAssistant/compare*.py
-ScientificResearchAssistant/test*.py
-
-# Exclude assistant context docs from tracked source
+# Keep assistant notes out of public repo
 ScientificResearchAssistant/CLAUDE_CONTEXT.md
 ScientificResearchAssistant/QUICK_REFERENCE.md
