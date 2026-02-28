@@ -12,6 +12,7 @@ Goal: Show that graph context improves answer quality beyond semantic similarity
 
 import json
 import pickle
+import argparse
 from typing import List, Dict, Tuple
 from collections import defaultdict, Counter
 import sys
@@ -354,46 +355,34 @@ Generate a well-structured answer (200-300 words):
         print(f"that vector search might miss, enabling richer contextual answers!")
 
 def main():
-    """Demo graph-enriched RAG"""
-    
-    print("="*80)
-    print("PHASE 5: GRAPH-ENRICHED RAG SYSTEM")
-    print("="*80)
-    print()
-    
-    # Initialize hybrid search engine
-    print("Initializing hybrid search engine...")
-    engine = HybridSearchEngine(redis_host='localhost', redis_port=6379)
-    
-    # Initialize RAG system
+    """Generate graph-enriched context prompt for a user query."""
+    parser = argparse.ArgumentParser(description="Build graph-enriched RAG context")
+    parser.add_argument("query", nargs="+", help="Research question")
+    parser.add_argument("--top-k", type=int, default=10, help="Number of papers to retrieve")
+    parser.add_argument(
+        "--show-comparison",
+        action="store_true",
+        help="Show vector-only vs hybrid retrieval comparison"
+    )
+    args = parser.parse_args()
+
+    print("=" * 80)
+    print("GRAPH-ENRICHED RAG CONTEXT BUILDER")
+    print("=" * 80)
+
+    engine = HybridSearchEngine()
     rag = GraphEnrichedRAG(engine)
-    
-    # Test queries
-    test_queries = [
-        "What methods are effective for healthcare prediction?",
-        "How do graph neural networks improve recommendation systems?",
-    ]
-    
-    for query in test_queries:
-        # Show graph value
-        rag.demonstrate_graph_value(query)
-        
-        print("\n")
-        
-        # Generate answer
-        result = rag.generate_answer(query, top_k=10)
-        
-        # Show the prompt (this is what would go to LLM)
-        print("\n" + "="*80)
-        print("GRAPH-ENRICHED PROMPT (What LLM sees):")
-        print("="*80)
-        print(result['prompt'][:2000] + "\n...[truncated]...")
-        
-        print("\n" + "="*80)
+    query_text = " ".join(args.query)
+
+    if args.show_comparison:
+        rag.demonstrate_graph_value(query_text)
         print()
-    
-    print("✅ Phase 5 Demo Complete!")
-    print("\nNext: Add LLM for actual answer generation")
+
+    result = rag.generate_answer(query_text, top_k=args.top_k)
+    print("\n" + "=" * 80)
+    print("GRAPH-ENRICHED PROMPT (What LLM sees):")
+    print("=" * 80)
+    print(result["prompt"][:2000] + "\n...[truncated]...")
 
 if __name__ == "__main__":
     main()

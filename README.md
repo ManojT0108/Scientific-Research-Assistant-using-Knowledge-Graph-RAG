@@ -92,7 +92,9 @@ Then query:
 ```bash
 python search_redis.py "knowledge graph rag in manufacturing"
 # or
-python enhanced_rag.py
+python enhanced_rag.py "How do I implement contrastive learning for recommendations?" --top-k 10
+# or (choose provider: local/claude/groq)
+python complete_rag.py "How do graph neural networks help recommendation?" --provider claude --top-k 10
 ```
 
 ## Docker Usage

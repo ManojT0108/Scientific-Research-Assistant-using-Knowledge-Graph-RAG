@@ -11,6 +11,7 @@ Compare quality across all three!
 
 import json
 import pickle
+import argparse
 from typing import List, Dict, Tuple, Optional
 from collections import defaultdict, Counter
 import sys
@@ -426,41 +427,45 @@ def compare_llms(query: str, engine: HybridSearchEngine):
         print(f"✅ Groq API: {result_groq['generation_time']:.1f}s (Fast, free)")
 
 def main():
-    """Demo with local LLM first"""
-    
-    print("="*80)
-    print("PHASE 5: GRAPH-ENRICHED RAG WITH LLM")
-    print("="*80)
-    print()
-    
-    # Initialize search engine
-    print("Initializing hybrid search engine...")
-    engine = HybridSearchEngine(redis_host='localhost', redis_port=6379)
-    
-    # Test query
-    query = "What methods are effective for healthcare prediction?"
-    
-    # Option 1: Just test local LLM
-    print("\n" + "="*80)
-    print("TESTING: LOCAL LLM (Llama 3.2-3B)")
-    print("="*80)
-    
-    rag = MultiLLMRAG(engine, llm_provider="local")
-    result = rag.answer_query(query, top_k=10)
-    
+    """Run graph-enriched RAG with a user-provided query."""
+    parser = argparse.ArgumentParser(description="Graph-enriched RAG with selectable LLM provider")
+    parser.add_argument("query", nargs="+", help="Research question")
+    parser.add_argument(
+        "--provider",
+        choices=["local", "claude", "groq"],
+        default="local",
+        help="LLM backend to use"
+    )
+    parser.add_argument("--top-k", type=int, default=10, help="Number of papers to retrieve")
+    args = parser.parse_args()
+
+    api_key = None
+    if args.provider == "claude":
+        api_key = os.getenv("ANTHROPIC_API_KEY")
+        if not api_key:
+            raise ValueError("Set ANTHROPIC_API_KEY for --provider claude")
+    elif args.provider == "groq":
+        api_key = os.getenv("GROQ_API_KEY")
+        if not api_key:
+            raise ValueError("Set GROQ_API_KEY for --provider groq")
+
+    print("=" * 80)
+    print("GRAPH-ENRICHED RAG WITH LLM")
+    print("=" * 80)
+    print("\nInitializing hybrid search engine...")
+    engine = HybridSearchEngine()
+
+    rag = MultiLLMRAG(engine, llm_provider=args.provider, api_key=api_key)
+    query_text = " ".join(args.query)
+    result = rag.answer_query(query_text, top_k=args.top_k)
+
     print(f"\n📄 ANSWER:")
-    print("="*80)
-    print(result['answer'])
-    print("="*80)
-    
+    print("=" * 80)
+    print(result["answer"])
+    print("=" * 80)
     print(f"\n⏱️  Generation time: {result['generation_time']:.1f} seconds")
     print(f"📊 Methods found: {len(result['entity_analysis']['methods'])}")
     print(f"📚 Papers retrieved: {len(result['papers'])}")
-    
-    print("\n✅ Phase 5 Complete!")
-    print("\nTo compare all LLMs, set API keys and run compare_llms()")
-    print("  export ANTHROPIC_API_KEY='your-key'")
-    print("  export GROQ_API_KEY='your-key'")
 
 if __name__ == "__main__":
     main()

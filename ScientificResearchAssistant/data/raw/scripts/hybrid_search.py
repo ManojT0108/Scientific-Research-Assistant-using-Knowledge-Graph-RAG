@@ -19,6 +19,7 @@ import networkx as nx
 from collections import defaultdict, Counter
 from typing import List, Dict, Tuple
 import os
+import argparse
 
 INDEX_NAME = "arxiv_chunks_idx"
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
@@ -371,34 +372,35 @@ class HybridSearchEngine:
         print("\n" + "="*80)
 
 def main():
-    """Demo hybrid search"""
-    
-    print("="*80)
-    print("PHASE 4: HYBRID SEARCH ENGINE")
-    print("="*80)
-    print()
-    
-    # Initialize engine
-    engine = HybridSearchEngine(redis_host='localhost', redis_port=6379)
-    
-    # Example queries
-    test_queries = [
-        "machine learning for healthcare",
-        "graph neural networks for recommendation",
-        "transformer models for text generation",
-    ]
-    
-    print("="*80)
-    print("DEMO: Comparing Search Methods")
-    print("="*80)
-    print()
-    
-    for query in test_queries:
-        engine.compare_search_methods(query, top_k=5)
-        print("\n")
-    
-    print("✅ Phase 4 Demo Complete!")
-    print("\nNext: Run 8_evaluate_search.py for comprehensive evaluation")
+    """Run hybrid/vector search for a user-provided query."""
+    parser = argparse.ArgumentParser(description="Hybrid semantic search")
+    parser.add_argument("query", nargs="+", help="Search query")
+    parser.add_argument("--k", type=int, default=5, help="Number of results")
+    parser.add_argument(
+        "--compare",
+        action="store_true",
+        help="Show side-by-side vector-only vs hybrid comparison"
+    )
+    parser.add_argument("--no-graph", action="store_true", help="Disable graph expansion")
+    args = parser.parse_args()
+
+    engine = HybridSearchEngine()
+    query_text = " ".join(args.query)
+
+    if args.compare:
+        engine.compare_search_methods(query_text, top_k=args.k)
+        return
+
+    results = engine.search(query_text, top_k=args.k, use_graph=not args.no_graph)
+    for i, result in enumerate(results, 1):
+        if "final_score" in result:
+            print(
+                f"{i}. [Final: {result['final_score']:.3f}, "
+                f"Vector: {result['vector_score']:.3f}, Graph: {result['graph_score']:.3f}] "
+                f"{result['title']}"
+            )
+        else:
+            print(f"{i}. [Vector: {result['vector_score']:.3f}] {result['title']}")
 
 if __name__ == "__main__":
     main()

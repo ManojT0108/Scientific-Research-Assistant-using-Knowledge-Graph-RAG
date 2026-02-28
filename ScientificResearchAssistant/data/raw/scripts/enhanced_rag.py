@@ -10,6 +10,7 @@ Improvements:
 
 import json
 import pickle
+import argparse
 from typing import List, Dict, Tuple, Optional
 from collections import defaultdict, Counter
 import sys
@@ -295,7 +296,13 @@ Your answer:"""
         }
 
 def main():
-    """Test enhanced RAG"""
+    """Run enhanced RAG for a user-provided query."""
+    parser = argparse.ArgumentParser(
+        description="Ask a research question using graph-enriched RAG (Claude)"
+    )
+    parser.add_argument("query", nargs="+", help="Research question")
+    parser.add_argument("--top-k", type=int, default=10, help="Number of papers to retrieve")
+    args = parser.parse_args()
 
     claude_api_key = os.getenv("ANTHROPIC_API_KEY")
     if not claude_api_key:
@@ -307,7 +314,7 @@ def main():
 
     # Initialize
     print("\nInitializing hybrid search engine...")
-    engine = HybridSearchEngine(redis_host='localhost', redis_port=6379)
+    engine = HybridSearchEngine()
 
     print("\nInitializing Enhanced RAG...")
     rag = EnhancedRAG(
@@ -316,40 +323,17 @@ def main():
         api_key=claude_api_key
     )
 
-    # Test queries
-    test_queries = [
-        "Which papers compare BERT and GPT-4 for text classification?",
-        "What are the main challenges in multi-hop question answering?",
-        "Which datasets should I use to evaluate my question answering system?",
-        "How do I implement contrastive learning for recommendations?",
-        "What's the state of the art accuracy for sentiment analysis?"
-    ]
+    query_text = " ".join(args.query)
+    result = rag.answer_query(query_text, top_k=args.top_k)
 
-    for i, query in enumerate(test_queries, 1):
-        print(f"\n{'='*80}")
-        print(f"TEST {i}/{len(test_queries)}")
-        print(f"Query: {query}")
-        print(f"{'='*80}\n")
-
-        result = rag.answer_query(query, top_k=10)
-
-        # Display answer
-        print(f"\n📄 ANSWER:")
-        print("="*80)
-        print(result['answer'])
-        print("="*80)
-
-        # Display paper recommendations
-        print(result['paper_recommendations'])
-
-        # Display stats
-        print(f"⏱️  Generation time: {result['generation_time']:.2f} seconds")
-        print(f"📊 Methods found: {len(result['entity_analysis']['methods'])}")
-        print(f"📚 Papers retrieved: {len(result['papers'])}")
-
-        print("\n")
-
-    print("\n✅ All tests complete!")
+    print("\n📄 ANSWER:")
+    print("=" * 80)
+    print(result["answer"])
+    print("=" * 80)
+    print(result["paper_recommendations"])
+    print(f"⏱️  Generation time: {result['generation_time']:.2f} seconds")
+    print(f"📊 Methods found: {len(result['entity_analysis']['methods'])}")
+    print(f"📚 Papers retrieved: {len(result['papers'])}")
 
 if __name__ == "__main__":
     main()
