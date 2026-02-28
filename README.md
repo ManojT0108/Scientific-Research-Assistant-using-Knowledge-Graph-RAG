@@ -19,7 +19,7 @@ I validated this repository for clone/run readiness by:
 flowchart LR
     A["fetch_papers_metadata.py"] --> B["download_pdfs.py"]
     B --> C["parse_full_pdfs.py"]
-    C --> D["chunk_full_papers.py (or chunk_metadata.py)"]
+    C --> D["chunk_full_papers.py"]
     D --> E["embed_chunks.py"]
     D --> F["extract_entities.py"]
     F --> G["build_kg_improved.py"]
@@ -27,7 +27,7 @@ flowchart LR
     D --> H
     G --> I["hybrid_search.py / search_with_kg.py"]
     H --> I
-    I --> J["enhanced_rag.py / claude_rag.py"]
+    I --> J["enhanced_rag.py"]
 ```
 
 ### Custom Architecture Image
@@ -93,8 +93,14 @@ Then query:
 python search_redis.py "knowledge graph rag in manufacturing"
 # or
 python enhanced_rag.py "How do I implement contrastive learning for recommendations?" --top-k 10
-# or (choose provider: local/claude/groq)
-python complete_rag.py "How do graph neural networks help recommendation?" --provider claude --top-k 10
+```
+
+## Comparison / Testing
+
+Use this to benchmark semantic-only retrieval vs hybrid retrieval quality:
+
+```bash
+python evaluate_search.py
 ```
 
 ## Docker Usage
