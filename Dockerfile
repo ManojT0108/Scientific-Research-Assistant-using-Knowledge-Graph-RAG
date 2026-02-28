@@ -17,6 +17,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY ScientificResearchAssistant /workspace/ScientificResearchAssistant
 
-WORKDIR /workspace/ScientificResearchAssistant/data/raw/scripts
+WORKDIR /workspace/ScientificResearchAssistant
 
 CMD ["bash"]

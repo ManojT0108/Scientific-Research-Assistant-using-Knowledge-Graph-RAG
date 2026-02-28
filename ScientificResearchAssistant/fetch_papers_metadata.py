@@ -1,4 +1,10 @@
-# scripts/fetch_arxiv_2024_top500_fixed.py
+"""
+Workflow Stage 1: Fetch ArXiv metadata for CS paper cohorts.
+
+Pulls metadata for configured categories/year and writes a JSONL catalog
+that downstream scripts use for PDF download and full-text parsing.
+"""
+
 import arxiv, json, os, time, calendar
 
 CATEGORIES = ["cs.IR", "cs.DB", "cs.LG"]

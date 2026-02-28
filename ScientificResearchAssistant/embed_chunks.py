@@ -1,3 +1,10 @@
+"""
+Workflow Stage 5: Embed chunk text for semantic retrieval.
+
+This script loads chunked paper text, generates sentence embeddings with
+all-MiniLM-L6-v2, and writes embeddings + metadata artifacts used by Redis.
+"""
+
 import os, json, numpy as np
 from tqdm import tqdm
 from sentence_transformers import SentenceTransformer

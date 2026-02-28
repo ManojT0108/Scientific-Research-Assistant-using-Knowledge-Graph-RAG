@@ -15,7 +15,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: sra-app
-    working_dir: /workspace/ScientificResearchAssistant/data/raw/scripts
+    working_dir: /workspace/ScientificResearchAssistant
     environment:
       REDIS_HOST: redis
       REDIS_PORT: "6379"

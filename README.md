@@ -40,7 +40,7 @@ When you share your architecture image, place it at `docs/architecture.png` (or 
 
 ## Repository Layout
 
-- `ScientificResearchAssistant/data/raw/scripts/` - pipeline and retrieval scripts
+- `ScientificResearchAssistant/` - pipeline and retrieval scripts
 - `ScientificResearchAssistant/requirements.txt` - Python dependencies
 - `Dockerfile` - app container image
 - `docker-compose.yml` - app + Redis Stack
@@ -61,7 +61,7 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r ScientificResearchAssistant/requirements.txt
 python -m nltk.downloader punkt stopwords
-cd ScientificResearchAssistant/data/raw/scripts
+cd ScientificResearchAssistant
 ```
 
 Set env vars (if needed):
@@ -74,7 +74,7 @@ export ANTHROPIC_API_KEY=your_key_here
 
 ## Pipeline Execution Order
 
-Run from `ScientificResearchAssistant/data/raw/scripts`:
+Run from `ScientificResearchAssistant`:
 
 ```bash
 python fetch_papers_metadata.py
@@ -112,7 +112,7 @@ docker compose up --build -d redis
 docker compose run --rm app
 ```
 
-Inside container (`/workspace/ScientificResearchAssistant/data/raw/scripts`):
+Inside container (`/workspace/ScientificResearchAssistant`):
 
 ```bash
 python fetch_papers_metadata.py
@@ -129,5 +129,5 @@ python search_redis.py "recommendation systems"
 ## Notes
 
 - First run will take significant time (paper download, parsing, embedding model download).
-- Generated data is intentionally not committed (`ScientificResearchAssistant/data/raw/scripts/data/`).
+- Generated data is intentionally not committed (`ScientificResearchAssistant/data/`).
 - If you run Claude-based scripts, provide `ANTHROPIC_API_KEY` via environment variable.

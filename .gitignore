@@ -21,7 +21,7 @@
 **/.env.*
 
 # Large/generated project artifacts
-ScientificResearchAssistant/data/raw/scripts/data/
+ScientificResearchAssistant/data/
 
 # Exclude non-code project docs at repository root
 Paper Review/
@@ -31,10 +31,10 @@ Report/
 Reports/
 
 # Exclude non-essential experiment/debug scripts
-ScientificResearchAssistant/data/raw/scripts/debug*.py
-ScientificResearchAssistant/data/raw/scripts/diagnose*.py
-ScientificResearchAssistant/data/raw/scripts/compare*.py
-ScientificResearchAssistant/data/raw/scripts/test*.py
+ScientificResearchAssistant/debug*.py
+ScientificResearchAssistant/diagnose*.py
+ScientificResearchAssistant/compare*.py
+ScientificResearchAssistant/test*.py
 
 # Exclude assistant context docs from tracked source
 ScientificResearchAssistant/CLAUDE_CONTEXT.md
