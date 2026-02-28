@@ -15,6 +15,8 @@ I validated this repository for clone/run readiness by:
 
 ## Architecture
 
+![Knowledge Graph Structure](docs/architecture.png)
+
 ```mermaid
 flowchart LR
     A["fetch_papers_metadata.py"] --> B["download_pdfs.py"]
@@ -85,6 +87,19 @@ python embed_chunks.py
 python extract_entities.py
 python build_kg_improved.py
 python redis_setup.py
+```
+
+Or run the full workflow with one command:
+
+```bash
+./run_pipeline.sh
+```
+
+Optional usage:
+
+```bash
+./run_pipeline.sh --query "How do graph neural networks improve recommendation systems?" --top-k 10
+./run_pipeline.sh --skip-fetch --skip-download
 ```
 
 Then query:
