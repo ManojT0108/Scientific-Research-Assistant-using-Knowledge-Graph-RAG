@@ -1,0 +1,41 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Python
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/.venv/
+**/venv/
+
+# Editor/OS
+.vscode/
+.idea/
+*.swp
+
+# Environment files
+**/.env
+**/.env.*
+
+# Large/generated project artifacts
+ScientificResearchAssistant/data/raw/scripts/data/
+
+# Exclude non-code project docs at repository root
+Paper Review/
+Poster/
+Presentations/
+Report/
+Reports/
+
+# Exclude non-essential experiment/debug scripts
+ScientificResearchAssistant/data/raw/scripts/debug*.py
+ScientificResearchAssistant/data/raw/scripts/diagnose*.py
+ScientificResearchAssistant/data/raw/scripts/compare*.py
+ScientificResearchAssistant/data/raw/scripts/test*.py
+
+# Exclude assistant context docs from tracked source
+ScientificResearchAssistant/CLAUDE_CONTEXT.md
+ScientificResearchAssistant/QUICK_REFERENCE.md
