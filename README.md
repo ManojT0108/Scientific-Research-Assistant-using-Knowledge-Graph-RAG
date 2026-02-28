@@ -60,6 +60,15 @@ This improves the chance of:
 - richer multi-paper synthesis
 - more complete researcher-facing answers
 
+## Why Redis Is Used
+
+Redis is used as the vector retrieval backend for speed and scalability.
+
+- Fast nearest-neighbor search over embeddings for low-latency query response
+- Practical indexing/retrieval for large chunk collections compared to in-memory linear scans
+- Supports production-style retrieval flow where semantic search is the first stage before graph expansion
+- Keeps retrieval and ranking responsive so the LLM stage is not bottlenecked by slow document search
+
 ## Architecture
 
 ![Knowledge Graph Structure](docs/architecture.png)
