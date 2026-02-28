@@ -18,8 +18,11 @@ import pickle
 import networkx as nx
 from collections import defaultdict, Counter
 from typing import List, Dict, Tuple
+import os
 
 INDEX_NAME = "arxiv_chunks_idx"
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
 
 class HybridSearchEngine:
     """
@@ -31,8 +34,10 @@ class HybridSearchEngine:
     3. Score fusion: Combine and re-rank results
     """
     
-    def __init__(self, redis_host='localhost', redis_port=6379):
+    def __init__(self, redis_host=None, redis_port=None):
         """Initialize search engine"""
+        redis_host = redis_host or REDIS_HOST
+        redis_port = redis_port or REDIS_PORT
         
         print("Initializing Hybrid Search Engine...")
         

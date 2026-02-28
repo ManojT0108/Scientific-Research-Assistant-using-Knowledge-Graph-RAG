@@ -28,8 +28,8 @@ import os
 from pathlib import Path
 
 # Redis configuration
-REDIS_HOST = "localhost"
-REDIS_PORT = 6379
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
 INDEX_NAME = "arxiv_chunks_idx"
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 

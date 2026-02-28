@@ -4,6 +4,7 @@ Migrates embeddings and metadata to Redis for fast vector similarity search
 """
 
 import json
+import os
 import numpy as np
 import redis
 from redis.commands.search.field import TextField, NumericField, TagField, VectorField
@@ -12,9 +13,9 @@ from redis.commands.search.query import Query
 from tqdm import tqdm
 
 # Configuration
-REDIS_HOST = "localhost"
-REDIS_PORT = 6379
-REDIS_DB = 0
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+REDIS_DB = int(os.getenv("REDIS_DB", "0"))
 
 EMB_PATH = "data/processed/embeddings.npy"
 CHUNK_CANDIDATES = [

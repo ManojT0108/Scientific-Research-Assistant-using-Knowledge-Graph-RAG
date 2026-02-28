@@ -1,0 +1,30 @@
+services:
+  redis:
+    image: redis/redis-stack-server:latest
+    container_name: sra-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sra-app
+    working_dir: /workspace/ScientificResearchAssistant/data/raw/scripts
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+    volumes:
+      - .:/workspace
+    stdin_open: true
+    tty: true
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: ["bash"]

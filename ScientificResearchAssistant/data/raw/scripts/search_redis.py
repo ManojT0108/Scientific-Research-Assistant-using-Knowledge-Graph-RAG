@@ -4,15 +4,16 @@ Uses Redis vector similarity search for sub-second query times
 """
 
 import argparse
+import os
 import numpy as np
 import redis
 from sentence_transformers import SentenceTransformer
 from redis.commands.search.query import Query
 
 # Configuration
-REDIS_HOST = "localhost"
-REDIS_PORT = 6379
-REDIS_DB = 0
+REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
+REDIS_DB = int(os.getenv("REDIS_DB", "0"))
 INDEX_NAME = "arxiv_chunks_idx"
 MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 

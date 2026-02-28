@@ -1,0 +1,12 @@
+.git
+.gitignore
+**/.DS_Store
+**/.venv
+**/__pycache__
+**/*.pyc
+Paper Review
+Poster
+Presentations
+Report
+Reports
+ScientificResearchAssistant/data/raw/scripts/data
